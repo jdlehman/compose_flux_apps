@@ -7,28 +7,27 @@ import * as TodoActions from '../actions/todos';
 
 class TodoApp extends Component {
   static contextTypes = {
-    registry: PropTypes.object.isRequired
+    counterStateStream: PropTypes.object.isRequired
   };
 
   constructor(props, context) {
     super(props);
 
     this.state = {
-      counterVal: context.registry.counter.getState().counter
+      counterVal: context.counterStateStream.getValue().counter
     };
   }
 
   componentDidMount() {
-    const { registry } = this.context;
-    this.unsubscribe = registry.counter.subscribe(() => {
+    this.context.counterStateStream.filter(x => x.counter % 2 === 0).subscribe((state) => {
       this.setState({
-        counterVal: registry.counter.getState().counter
+        counterVal: state.counter
       });
     });
   }
 
   componentDidUnmount() {
-    this.unsubscribe();
+    this.context.registry.dispose();
   }
 
   render() {
@@ -40,7 +39,7 @@ class TodoApp extends Component {
         <Header addTodo={actions.addTodo} />
         <MainSection todos={todos} actions={actions} />
         <div>
-          Counter State: {this.state.counterVal}
+          Even Counter State: {this.state.counterVal}
         </div>
       </div>
     );

@@ -1,33 +1,34 @@
 import React, { PropTypes, Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
+import * as CounterActions from '../actions/counter';
 import CounterApp from './CounterApp';
 import configureStore from '../store/configureStore';
+import { BehaviorSubject } from 'rx';
 
-import { bindActionCreators } from 'redux';
-import * as CounterActions from '../actions/counter';
+function createStoreStream(store) {
+  var subject = new BehaviorSubject(store.getState());
+  store.subscribe(() => subject.onNext(store.getState()));
+  return subject;
+}
 
 const store = configureStore();
+const actions = bindActionCreators(CounterActions, store.dispatch);
+export const increment = actions.increment;
+export const decrement = actions.decrement;
+export const storeStream = createStoreStream(store);
 
 export default class Root extends Component {
   static childContextTypes = {
-    registry: PropTypes.object.isRequired
+    completeAll: PropTypes.func.isRequired,
+    clearCompleted: PropTypes.func.isRequired
   };
 
   getChildContext() {
-    return {registry: this.props.registry};
-  }
-
-  componentWillMount() {
-    var actions = bindActionCreators(CounterActions, store.dispatch);
-    var register = {
-      getState: store.getState,
-      subscribe: store.subscribe,
-      actions: {
-        increment: actions.increment,
-        decrement: actions.decrement
-      }
+    return {
+      completeAll: this.props.completeAll,
+      clearCompleted: this.props.clearCompleted
     };
-    this.props.registry[this.props.registerName] = register;
   }
 
   render() {

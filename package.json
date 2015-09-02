@@ -29,6 +29,7 @@
     "counter": "file:counter",
     "react": "^0.13.3",
     "redux": "^1.0.1",
+    "rx": "^3.1.2",
     "todomvc": "file:todomvc"
   }
 }

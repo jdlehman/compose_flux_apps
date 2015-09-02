@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 
 class Counter extends Component {
   static contextTypes = {
-    registry: PropTypes.object.isRequired
+    completeAll: PropTypes.func.isRequired,
+    clearCompleted: PropTypes.func.isRequired
   };
 
   render() {
     const { increment, incrementIfOdd, incrementAsync, decrement, counter } = this.props;
-    const { registry } = this.context;
     return (
       <div style={{border: '1px solid red'}}>
         <h2>Counter App</h2>
@@ -22,9 +22,9 @@ class Counter extends Component {
           {' '}
           <button onClick={() => incrementAsync()}>Increment async</button>
           {' '}
-          <button onClick={() => registry.todo.actions.completeAll()}>Mark Todos as Completed</button>
+          <button onClick={() => this.context.completeAll()}>Mark Todos as Completed</button>
           {' '}
-          <button onClick={() => registry.todo.actions.clearCompleted()}>Clear Completed Todos</button>
+          <button onClick={() => this.context.clearCompleted()}>Clear Completed Todos</button>
         </p>
       </div>
     );
