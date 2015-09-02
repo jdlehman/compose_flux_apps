@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var autoprefixer = require('autoprefixer-core');
 
 module.exports = {
   cache: true,
@@ -30,26 +29,10 @@ module.exports = {
   ],
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
-      {
-        test: /\.css$/,
-        loaders: ['style', 'css', 'postcss']
-      },
-      {
-        test: /\.(jpg|svgz|png)$/,
-        loader: 'file?name=[path][name]-[hash].[ext]'
-      },
-      { test: /\.svg$/,
-        loaders: [
-          'svg?name=[path][name]-[hash].[ext]',
-          'svgo'
-        ],
-      }
+      { test: /\.js$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-  ],
-  postcss: [autoprefixer]
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };
