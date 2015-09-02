@@ -27,7 +27,7 @@ class TodoApp extends Component {
   }
 
   componentDidUnmount() {
-    this.context.registry.dispose();
+    this.context.counterStateStream.dispose();
   }
 
   render() {
